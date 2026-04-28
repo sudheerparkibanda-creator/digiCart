@@ -1,0 +1,55 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      group-id: cart-service
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/cart_service_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+price-service:
+  base-url: http://price-service
+
+stock-service:
+  base-url: http://stock-service
+
+product-service:
+  base-url: http://product-service
+
+address-service:
+  base-url: http://address-service
+
+user-service:
+  base-url: http://user-service
+
+order-service:
+  base-url: http://order-service
+
+payment-service:
+  base-url: http://payment-service
+
+app:
+  kafka:
+    request-timeout-ms: 10000
+    topics:
+      payment-link-request: payment-link.ensure.request.v1
+      payment-link-response: payment-link.ensure.response.v1
+
+server:
+  port: 8086
+  error:
+    include-message: always
+    include-stacktrace: always
+

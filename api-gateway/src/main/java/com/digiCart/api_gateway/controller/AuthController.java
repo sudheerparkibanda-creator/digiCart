@@ -1,0 +1,85 @@
+package com.digiCart.api_gateway.controller;
+
+import com.digiCart.api_gateway.client.UserAuthClient;
+import com.digiCart.api_gateway.dto.AuthResponse;
+import com.digiCart.api_gateway.dto.LoginRequest;
+import com.digiCart.api_gateway.dto.RegisterRequest;
+import com.digiCart.api_gateway.dto.UserAuthVerifyResponse;
+import com.digiCart.api_gateway.dto.UserRegisterResponse;
+import com.digiCart.api_gateway.security.JwtUtil;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    private final UserAuthClient userAuthClient;
+    private final JwtUtil jwtUtil;
+
+    public AuthController(UserAuthClient userAuthClient,
+                          JwtUtil jwtUtil) {
+        this.userAuthClient = userAuthClient;
+        this.jwtUtil = jwtUtil;
+    }
+
+    /**
+     * Authenticate with username + password and receive a JWT.
+     *
+     * <pre>
+     * POST /auth/login
+     * { "username": "admin", "password": "admin123" }
+     * </pre>
+     */
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        UserAuthVerifyResponse verification = userAuthClient.verifyCredentials(request);
+        if (verification == null || !verification.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid username or password"));
+        }
+
+        String token = jwtUtil.generateToken(verification.getUsername(), verification.getRole());
+        return ResponseEntity.ok(new AuthResponse(token, verification.getUsername(), verification.getRole()));
+    }
+
+    /**
+     * Register a new user.  The token is returned immediately so the client
+     * can start making authenticated calls right away.
+     *
+     * <pre>
+     * POST /auth/register
+     * { "username": "alice", "password": "secret" }
+     * </pre>
+     */
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        if (request.getUsername() == null || request.getUsername().isBlank()
+                || request.getPassword() == null || request.getPassword().length() < 6) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Username must not be blank and password must be >= 6 chars"));
+        }
+
+        UserRegisterResponse registerResponse;
+        try {
+            registerResponse = userAuthClient.registerUser(request);
+        } catch (HttpClientErrorException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", "Username already exists or registration failed"));
+        }
+
+        String role = registerResponse != null ? registerResponse.getRole() : "Customer";
+        String token = jwtUtil.generateToken(request.getUsername(), role);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new AuthResponse(token, request.getUsername(), role));
+    }
+}
+

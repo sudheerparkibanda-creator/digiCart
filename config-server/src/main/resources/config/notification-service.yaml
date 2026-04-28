@@ -1,0 +1,35 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sudheer.emailbox@gmail.com
+    password: Shambhavi@12
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+
+notification:
+  mail:
+    from: your-email@gmail.com
+
+app:
+  kafka:
+    topics:
+      notification-order-placed: notification.order-placed
+      notification-payment-success: notification.payment-success
+
+order-service:
+  base-url: ${ORDER_SERVICE_BASE_URL:http://localhost:8087}
+
+server:
+  port: 8089
+

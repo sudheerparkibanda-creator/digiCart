@@ -1,0 +1,77 @@
+server:
+  port: 8080
+
+# ── JWT configuration ─────────────────────────────────────────────────────────
+app:
+  jwt:
+    # Plain-text secret — must be >= 32 characters for HS256.
+    # Change this value in production!
+    secret: digiCartSuperSecretJWTKey2026ChangeInProd!!!
+    expiration-ms: 86400000   # 24 hours
+
+auth:
+  user-service:
+    base-url: ${AUTH_USER_SERVICE_BASE_URL:http://localhost:8081}
+
+spring:
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          # ── user-service  (port 8081) ─────────────────────────────────────
+          - id: user-service
+            uri: lb://user-service
+            predicates:
+              - Path=/users/**
+
+          # ── address-service  (port 8082) ─────────────────────────────────
+          - id: address-service
+            uri: lb://address-service
+            predicates:
+              - Path=/addresses/**
+
+          # ── product-service  (port 8083) ─────────────────────────────────
+          - id: product-service
+            uri: lb://product-service
+            predicates:
+              - Path=/products/**
+
+          # ── price-service  (port 8084) ───────────────────────────────────
+          - id: price-service
+            uri: lb://price-service
+            predicates:
+              - Path=/prices/**
+
+          # ── stock-service  (port 8085) ───────────────────────────────────
+          - id: stock-service
+            uri: lb://stock-service
+            predicates:
+              - Path=/stocks/**
+
+          # ── order-service  (port 8087) ───────────────────────────────────
+          - id: order-service
+            uri: lb://order-service
+            predicates:
+              - Path=/orders/**
+
+          # ── payment-service  (port 8088) ─────────────────────────────────
+          - id: payment-service
+            uri: lb://payment-service
+            predicates:
+              - Path=/payments/**
+
+          # ── cart-service  (port 8086) ────────────────────────────────────
+          # Cart paths are /{customerId}/carts/**, so this must be last to avoid
+          # shadowing the fixed-prefix routes above.
+          - id: cart-service
+            uri: lb://cart-service
+            predicates:
+              - Path=/{customerId}/carts/**
+
+# Expose gateway route actuator for debugging
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Order placed</title>
+</head>
+<body>
+<p>Hi,</p>
+<p>Your order <strong th:text="${orderId}">ORDER_ID</strong> was placed successfully.</p>
+<p>Please complete your payment using the link below:</p>
+<p><a th:href="${paymentLink}" th:text="${paymentLink}">Payment Link</a></p>
+<p>Once payment is completed, we will process your order.</p>
+<p>Thanks,<br/>DigiCart Team</p>
+</body>
+</html>
+

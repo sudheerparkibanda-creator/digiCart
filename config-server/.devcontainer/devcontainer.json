@@ -1,0 +1,13 @@
+{
+  "name": "Config Server Dev Container",
+  "image": "mcr.microsoft.com/vscode/devcontainers/java:0-17",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "extensions": [
+    "vscjava.vscode-java-pack",
+    "vscjava.vscode-spring-boot-dashboard",
+    "vscjava.vscode-maven"
+  ],
+  "forwardPorts": [8888],
+  "postCreateCommand": "./mvnw -B -DskipTests package"
+}

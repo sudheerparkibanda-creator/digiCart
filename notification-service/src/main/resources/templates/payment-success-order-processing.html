@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Payment successful</title>
+</head>
+<body>
+<p>Hi,</p>
+<p>Your payment was successful for order <strong th:text="${orderId}">ORDER_ID</strong>.</p>
+<p th:if="${paymentId != null and !#strings.isEmpty(paymentId)}">Payment ID: <strong th:text="${paymentId}">PAYMENT_ID</strong></p>
+<p>Your order will be processed soon.</p>
+<p>Thanks,<br/>DigiCart Team</p>
+</body>
+</html>
+

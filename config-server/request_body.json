@@ -1,0 +1,15 @@
+﻿{
+    "landmark":  "Near Park",
+    "fullName":  "John Doe",
+    "district":  "Mumbai",
+    "state":  "MAHARASHTRA",
+    "addressLine2":  "Apartment 4B",
+    "alternatePhone":  "9123456789",
+    "addressType":  "HOME",
+    "country":  "India",
+    "addressLine1":  "123 Main Street",
+    "mobileNumber":  "9876543210",
+    "city":  "Mumbai",
+    "pinCode":  "400001",
+    "addToCustomerAddresses":  true
+}
