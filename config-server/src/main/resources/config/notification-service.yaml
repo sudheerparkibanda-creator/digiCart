@@ -11,7 +11,7 @@ spring:
           starttls:
             enable: true
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -28,7 +28,7 @@ app:
       notification-payment-success: notification.payment-success
 
 order-service:
-  base-url: ${ORDER_SERVICE_BASE_URL:http://localhost:8087}
+  base-url: ${ORDER_SERVICE_BASE_URL:http://order-service:8087}
 
 server:
   port: 8089

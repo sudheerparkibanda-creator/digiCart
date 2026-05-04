@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -14,7 +14,7 @@ server:
   port: 8088
 
 order-service:
-  base-url: ${ORDER_SERVICE_BASE_URL:http://localhost:8087}
+  base-url: ${ORDER_SERVICE_BASE_URL:http://order-service:8087}
 
 razorpay:
   api-base-url: https://api.razorpay.com/v1

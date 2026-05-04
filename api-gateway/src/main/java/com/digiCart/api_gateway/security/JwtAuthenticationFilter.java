@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,6 +35,7 @@ import java.util.Locale;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String AUTH_USERNAME_HEADER = "X-Auth-Username";
     private static final String AUTH_ROLE_HEADER = "X-Auth-Role";
@@ -59,14 +62,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
-            // No token → proceed; SecurityConfig will reject if the path needs auth
+            if (log.isDebugEnabled()) {
+                log.debug("No Bearer token found in request to {}", request.getRequestURI());
+            }
             chain.doFilter(request, response);
             return;
         }
 
         String token = authHeader.substring(BEARER_PREFIX.length());
+        if (log.isDebugEnabled()) {
+            log.debug("Bearer token found for {}", request.getRequestURI());
+        }
 
         if (jwtUtil.validateToken(token)) {
+            log.debug("JWT is valid for request {}", request.getRequestURI());
             String username = jwtUtil.extractUsername(token);
             String rawRole = jwtUtil.extractRole(token);
             String normalizedRole = normalizeRole(rawRole);

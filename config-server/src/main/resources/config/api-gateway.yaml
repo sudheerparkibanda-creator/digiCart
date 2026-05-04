@@ -11,7 +11,7 @@ app:
 
 auth:
   user-service:
-    base-url: ${AUTH_USER_SERVICE_BASE_URL:http://localhost:8081}
+    base-url: ${AUTH_USER_SERVICE_BASE_URL:http://user-service:8081}
 
 spring:
   cloud:
