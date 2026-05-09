@@ -1,0 +1,889 @@
+{
+  "info": {
+    "_postman_id": "70572def-5f1a-4488-9b44-8f1ba3392c49",
+    "name": "01",
+    "description": "Complete API collection for DigiCart e-commerce microservices with sample data",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "7071589"
+  },
+  "item": [
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "{{productCode}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"PROD001\",\n  \"description\": \"Wireless Bluetooth Headphones\",\n  \"features\": {\n    \"color\": \"Black\",\n    \"battery_life\": \"30 hours\",\n    \"connectivity\": \"Bluetooth 5.0\",\n    \"weight\": \"250g\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"PROD001\",\n  \"description\": \"Premium Wireless Bluetooth Headphones\",\n  \"features\": {\n    \"color\": \"Black\",\n    \"battery_life\": \"35 hours\",\n    \"connectivity\": \"Bluetooth 5.0\",\n    \"weight\": \"250g\",\n    \"noise_cancellation\": \"Active\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "{{productCode}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Prices",
+      "item": [
+        {
+          "name": "Get All Prices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/prices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "prices"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Price by Product Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/prices/{{productCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "prices",
+                "{{productCode}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Prices by Product Codes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/prices/by-product-codes?codes=PROD001,PROD002",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "prices",
+                "by-product-codes"
+              ],
+              "query": [
+                {
+                  "key": "codes",
+                  "value": "PROD001,PROD002"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Price (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productCode\": \"PROD001\",\n  \"price\": 99.99,\n  \"currency\": \"USD\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/prices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "prices"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Price (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productCode\": \"PROD001\",\n  \"price\": 89.99,\n  \"currency\": \"USD\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/prices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "prices"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Price (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/prices/{{productCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "prices",
+                "{{productCode}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Stock",
+      "item": [
+        {
+          "name": "Get All Stock",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stocks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stocks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stock by Product ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stocks/{{productCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stocks",
+                "{{productCode}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stock by Product IDs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stocks/by-product-ids?ids=PROD001,PROD002",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stocks",
+                "by-product-ids"
+              ],
+              "query": [
+                {
+                  "key": "ids",
+                  "value": "PROD001,PROD002"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Stock (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc3ODA1OTYyNSwiZXhwIjoxNzc4MTQ2MDI1fQ.JDa1IJw9O7UWZHaX2pIxpdf3A-5XTPi9QdPrOehLwmE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PROD001\",\n  \"availableQuantity\": 100,\n  \"location\": \"Warehouse A\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stocks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stocks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Stock (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PROD001\",\n  \"quantity\": 150,\n  \"location\": \"Warehouse A\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stocks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stocks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Stock (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stocks/{{productCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stocks",
+                "{{productCode}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Addresses",
+      "item": [
+        {
+          "name": "Get All Addresses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/addresses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Address by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/addresses/{{addressId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "addresses",
+                "{{addressId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"user123\",\n  \"street\": \"123 Main Street\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"zipCode\": \"10001\",\n  \"country\": \"USA\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/addresses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Address",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"user123\",\n  \"street\": \"456 Oak Avenue\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"zipCode\": \"10001\",\n  \"country\": \"USA\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/addresses/{{addressId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "addresses",
+                "{{addressId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Address",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/addresses/{{addressId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "addresses",
+                "{{addressId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Create Cart",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{userId}}/carts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{userId}}",
+                "carts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Carts for Customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{userId}}/carts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{userId}}",
+                "carts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Item to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productCode\": \"PROD001\",\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{userId}}/carts/{{cartId}}/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{userId}}",
+                "carts",
+                "{{cartId}}",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Set Delivery Address (New)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \"fullName\": \"Sudheer Parkibanda\",\n  \"mobileNumber\": \"+919059650674\",\n  \"addressLine1\": \"plot no 5\",\n  \"addressLine2\": \"parvathi nagar\",\n  \"landmark\": \"lavish hotel\",\n  \"city\": \"Delhi\",\n  \"district\": \"Delhi\",\n  \"state\": \"DELHI\",\n  \"pinCode\": \"110001\",\n  \"country\": \"India\",\n  \"addressType\": \"HOME\",\n  \"alternatePhone\": \"+919059650674\",\n  \"addToCustomerAddresses\": true,\n  \"email\": \"sudheer.parkiabanda@gmail.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{userId}}/carts/{{cartId}}/delivery-address/new",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{userId}}",
+                "carts",
+                "{{cartId}}",
+                "delivery-address",
+                "new"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Set Delivery Address (Existing)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"addressId\": \"addr123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{userId}}/carts/{{cartId}}/delivery-address",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{userId}}",
+                "carts",
+                "{{cartId}}",
+                "delivery-address"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Place Order",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{userId}}/carts/{{cartId}}/place-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "{{userId}}",
+                "carts",
+                "{{cartId}}",
+                "place-order"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "{{orderId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const data = pm.response.json();",
+                  "    if (data.token) {",
+                  "        pm.environment.set('token', data.token);",
+                  "    }",
+                  "    if (data.username) {",
+                  "        pm.environment.set('username', data.username);",
+                  "    }",
+                  "    if (data.role) {",
+                  "        pm.environment.set('user_role', data.role);",
+                  "    }",
+                  "    console.log('Saved token and user info.');",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"name\": \"{{user_full_name}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"arjun.kumar@example.in\",\n    \"verificationCode\": \"123456\"\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/internal/auth/activate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "internal",
+                "auth",
+                "activate"
+              ]
+            },
+            "description": "Generated from cURL: curl -X POST http://localhost:8080/internal/auth/activate \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"email\": \"arjun.kumar@example.in\",\n    \"verificationCode\": \"123456\"\n  }'"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "userId",
+      "value": "user123"
+    },
+    {
+      "key": "cartId",
+      "value": "cart123"
+    },
+    {
+      "key": "orderId",
+      "value": "order123"
+    },
+    {
+      "key": "productCode",
+      "value": "PROD001"
+    },
+    {
+      "key": "addressId",
+      "value": "addr123"
+    },
+    {
+      "key": "jwtToken",
+      "value": ""
+    }
+  ]
+}
