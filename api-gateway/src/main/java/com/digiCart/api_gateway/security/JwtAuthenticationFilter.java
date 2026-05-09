@@ -50,7 +50,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.startsWith("/auth/") || path.startsWith("/actuator/");
+        boolean skip = path.startsWith("/auth/") || path.startsWith("/actuator/");
+        System.out.println("[JWT Filter] shouldNotFilter path=" + path + " skip=" + skip);
+        return skip;
     }
 
     @Override
@@ -60,6 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        System.out.println("[JWT Filter] doFilterInternal path=" + request.getServletPath() + " authHeader=" + (authHeader != null));
 
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
             if (log.isDebugEnabled()) {

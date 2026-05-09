@@ -1,5 +1,6 @@
 package com.digiCart.api_gateway.client;
 
+import com.digiCart.api_gateway.dto.ActivationRequest;
 import com.digiCart.api_gateway.dto.LoginRequest;
 import com.digiCart.api_gateway.dto.RegisterRequest;
 import com.digiCart.api_gateway.dto.UserAuthVerifyResponse;
@@ -47,6 +48,13 @@ public class UserAuthClient {
                 request,
                 UserRegisterResponse.class);
         return response.getBody();
+    }
+
+    public void activateUser(ActivationRequest request) {
+        restTemplate.postForEntity(
+                baseUrl + "/internal/auth/activate",
+                request,
+                Void.class);
     }
 }
 

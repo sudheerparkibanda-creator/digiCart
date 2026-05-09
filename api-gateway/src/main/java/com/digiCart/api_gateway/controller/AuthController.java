@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.digiCart.api_gateway.client.UserAuthClient;
+import com.digiCart.api_gateway.dto.ActivationRequest;
 import com.digiCart.api_gateway.dto.AuthResponse;
 import com.digiCart.api_gateway.dto.LoginRequest;
 import com.digiCart.api_gateway.dto.RegisterRequest;
@@ -80,6 +81,28 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", "Registration successful. Please check your email to verify your account.", 
                         "email", request.getEmail()));
+    }
+
+    @PostMapping("/activate")
+    public ResponseEntity<?> activate(@RequestBody ActivationRequest request) {
+        if (request.getEmail() == null || request.getEmail().isBlank()
+                || request.getVerificationCode() == null || request.getVerificationCode().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Email and verification code are required"));
+        }
+
+        try {
+            userAuthClient.activateUser(request);
+            return ResponseEntity.ok(Map.of(
+                    "message", "User account activated successfully. You can now login."));
+        } catch (HttpClientErrorException ex) {
+            if (ex.getStatusCode() == HttpStatus.BAD_REQUEST) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Invalid email or activation code"));
+            }
+            return ResponseEntity.status(ex.getStatusCode())
+                    .body(Map.of("error", "Activation failed"));
+        }
     }
 }
 
