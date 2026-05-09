@@ -2,15 +2,15 @@ package com.digiCart.user_service.dto;
 
 public class RegisterUserResponse {
     private String userId;
-    private String username;
+    private String name;
     private String role;
 
     public RegisterUserResponse() {
     }
 
-    public RegisterUserResponse(String userId, String username, String role) {
+    public RegisterUserResponse(String userId, String name, String role) {
         this.userId = userId;
-        this.username = username;
+        this.name = name;
         this.role = role;
     }
 
@@ -22,12 +22,20 @@ public class RegisterUserResponse {
         this.userId = userId;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getUsername() {
-        return username;
+        return name;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.name = username;
     }
 
     public String getRole() {

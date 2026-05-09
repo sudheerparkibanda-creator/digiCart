@@ -18,7 +18,7 @@ public class OrderServiceClient {
     private final String baseUrl;
 
     public OrderServiceClient(RestTemplateBuilder builder,
-                              @Value("${order-service.base-url:http://localhost:8087}") String baseUrl) {
+                              @Value("${order-service.base-url:http://order-service:8087}") String baseUrl) {
         this.restTemplate = builder.build();
         this.baseUrl = baseUrl;
     }

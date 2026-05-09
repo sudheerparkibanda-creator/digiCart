@@ -1,9 +1,5 @@
 package com.digiCart.notification_service.service;
 
-import com.digiCart.notification_service.dto.OrderPlacedNotificationEvent;
-import com.digiCart.notification_service.dto.PaymentSuccessNotificationEvent;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +8,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import com.digiCart.notification_service.dto.OrderPlacedNotificationEvent;
+import com.digiCart.notification_service.dto.PaymentSuccessNotificationEvent;
+import com.digiCart.notification_service.dto.UserRegistrationNotificationEvent;
+
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class NotificationEmailService {
@@ -59,6 +61,17 @@ public class NotificationEmailService {
         if (sent) {
             orderServiceClient.markPaymentSuccessEmailSent(event.getOrderId());
         }
+    }
+
+    public void sendUserRegistrationEmail(UserRegistrationNotificationEvent event) {
+        Context context = new Context();
+        context.setVariable("name", event.getName());
+        context.setVariable("verificationCode", event.getVerificationCode());
+
+        String subject = "Welcome to DigiCart - activate your account";
+        String htmlMessage = templateEngine.process("user-registration-verify", context);
+
+        sendEmail(event.getEmail(), subject, htmlMessage);
     }
 
     private boolean sendEmail(String toEmail, String subject, String htmlMessage) {

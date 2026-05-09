@@ -1,19 +1,6 @@
-server:
-  port: 8080
-
-# ── JWT configuration ─────────────────────────────────────────────────────────
-app:
-  jwt:
-    # Plain-text secret — must be >= 32 characters for HS256.
-    # Change this value in production!
-    secret: digiCartSuperSecretJWTKey2026ChangeInProd!!!
-    expiration-ms: 86400000   # 24 hours
-
-auth:
-  user-service:
-    base-url: ${AUTH_USER_SERVICE_BASE_URL:http://user-service:8081}
-
 spring:
+  application:
+    name: api-gateway
   cloud:
     gateway:
       mvc:
@@ -68,10 +55,35 @@ spring:
             predicates:
               - Path=/{customerId}/carts/**
 
+# ── JWT configuration ─────────────────────────────────────────────────────────
+app:
+  jwt:
+    # Plain-text secret — must be >= 32 characters for HS256.
+    # Change this value in production!
+    secret: digiCartSuperSecretJWTKey2026ChangeInProd!!!
+    expiration-ms: 86400000   # 24 hours
+
+auth:
+  user-service:
+    base-url: ${AUTH_USER_SERVICE_BASE_URL:http://user-service:8081}
+
+server:
+  port: 8080
+
 # Expose gateway route actuator for debugging
 management:
   endpoints:
     web:
       exposure:
         include: health,info,gateway
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
 

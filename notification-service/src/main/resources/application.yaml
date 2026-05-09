@@ -1,54 +1,13 @@
-server:
-  port: 9090
-
 spring:
-  application:
-    name: notification-service
-  cloud:
-    config:
-      enabled: false
-  mail:
-    host: localhost
-    port: 1025
-    username: ""
-    password: ""
-    properties:
-      mail:
-        smtp:
-          auth: false
-          starttls:
-            enable: false
-
-eureka:
-  client:
-    enabled: false
-
-management:
-  health:
-    discovery:
-      enabled: false
-    health:
-      show-details: always
-  tracing:
-    sampling:
-      probability: 1.0
-  zipkin:
-    tracing:
-      endpoint: http://zipkin:9411/api/v2/spans
-
-logging:
-  pattern:
-    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
-
-# Local configuration for testing
-app:
+  config:
+    import: optional:configserver:http://config-server:8888
   kafka:
-    topics:
-      notification-order-placed: notification.order-placed
+    bootstrap-servers: kafka:9092
+    topic:
       notification-payment-success: notification.payment-success
 
 order-service:
-  base-url: http://localhost:8087
+  base-url: ${ORDER_SERVICE_BASE_URL:http://order-service:8087}
 
 notification:
   mail:

@@ -80,6 +80,27 @@
               }
             }
           ]
+        },
+        {
+          "name": "Verify Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"verificationCode\": \"{{verification_code}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/verify-account",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "verify-account"]
+            }
+          }
         }
       ]
     },
@@ -126,7 +147,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"street\": \"123 Main St\",\n  \"city\": \"Anytown\",\n  \"state\": \"CA\",\n  \"zipCode\": \"12345\",\n  \"country\": \"USA\"\n}"
+              "raw": "{\n  \"fullName\": \"Ravi Kumar\",\n  \"mobileNumber\": \"9876543210\",\n  \"addressLine1\": \"Flat 502, Saffron Heights\",\n  \"addressLine2\": \"Near Lalbagh Main Gate\",\n  \"landmark\": \"Opposite Lalbagh Botanical Garden\",\n  \"city\": \"Bengaluru\",\n  \"district\": \"Bangalore Urban\",\n  \"state\": \"KARNATAKA\",\n  \"pinCode\": \"560027\",\n  \"country\": \"India\",\n  \"addressType\": \"HOME\",\n  \"alternatePhone\": \"08012345678\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/addresses",
@@ -151,7 +172,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"street\": \"456 Oak Ave\",\n  \"city\": \"Newtown\",\n  \"state\": \"NY\",\n  \"zipCode\": \"67890\",\n  \"country\": \"USA\"\n}"
+              "raw": "{\n  \"fullName\": \"Ravi Kumar\",\n  \"mobileNumber\": \"9876543210\",\n  \"addressLine1\": \"Flat 502, Saffron Heights\",\n  \"addressLine2\": \"Near Lalbagh Main Gate\",\n  \"landmark\": \"Opposite Lalbagh Botanical Garden\",\n  \"city\": \"Bengaluru\",\n  \"district\": \"Bangalore Urban\",\n  \"state\": \"KARNATAKA\",\n  \"pinCode\": \"560027\",\n  \"country\": \"India\",\n  \"addressType\": \"HOME\",\n  \"alternatePhone\": \"08012345678\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/addresses/{{address_id}}",
@@ -336,7 +357,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"productId\": \"{{product_code}}\",\n  \"quantity\": 100\n}"
+              "raw": "{\n  \"productId\": \"{{product_code}}\",\n  \"availableQuantity\": 100,\n  \"consumedQuantity\": 0\n}"
             },
             "url": {
               "raw": "{{base_url}}/stocks",
@@ -361,7 +382,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"productId\": \"{{product_code}}\",\n  \"quantity\": 150\n}"
+              "raw": "{\n  \"productId\": \"{{product_code}}\",\n  \"availableQuantity\": 150,\n  \"consumedQuantity\": 0\n}"
             },
             "url": {
               "raw": "{{base_url}}/stocks",
@@ -450,7 +471,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"productCode\": \"{{product_code}}\",\n  \"price\": 99.99,\n  \"currency\": \"USD\"\n}"
+              "raw": "{\n  \"productCode\": \"{{product_code}}\",\n  \"price\": 99.99,\n  \"unit\": \"INR\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/prices",
@@ -475,7 +496,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"productCode\": \"{{product_code}}\",\n  \"price\": 149.99,\n  \"currency\": \"USD\"\n}"
+              "raw": "{\n  \"productCode\": \"{{product_code}}\",\n  \"price\": 149.99,\n  \"unit\": \"INR\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/prices",
@@ -556,7 +577,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"street\": \"123 Main St\",\n  \"city\": \"Anytown\",\n  \"state\": \"CA\",\n  \"zipCode\": \"12345\",\n  \"country\": \"USA\"\n}"
+              "raw": "{\n  \"fullName\": \"Ravi Kumar\",\n  \"mobileNumber\": \"9876543210\",\n  \"email\": \"{{email}}\",\n  \"addressLine1\": \"Flat 502, Saffron Heights\",\n  \"addressLine2\": \"Near Lalbagh Main Gate\",\n  \"landmark\": \"Opposite Lalbagh Botanical Garden\",\n  \"city\": \"Bengaluru\",\n  \"district\": \"Bangalore Urban\",\n  \"state\": \"KARNATAKA\",\n  \"pinCode\": \"560027\",\n  \"country\": \"India\",\n  \"addressType\": \"HOME\",\n  \"alternatePhone\": \"08012345678\",\n  \"addToCustomerAddresses\": true\n}"
             },
             "url": {
               "raw": "{{base_url}}/{{customer_id}}/carts/{{cart_id}}/delivery-address/new",
@@ -581,7 +602,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"addressId\": {{address_id}}\n}"
+              "raw": "{\n  \"addressId\": \"{{address_id}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/{{customer_id}}/carts/{{cart_id}}/delivery-address",
@@ -606,7 +627,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"productCode\": \"{{product_code}}\",\n  \"quantity\": 1\n}"
+              "raw": "{\n  \"productId\": \"{{product_code}}\",\n  \"quantity\": 1\n}"
             },
             "url": {
               "raw": "{{base_url}}/{{customer_id}}/carts/{{cart_id}}/add",
@@ -737,7 +758,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"cartId\": {{cart_id}},\n  \"customerId\": {{customer_id}}\n}"
+              "raw": "{\n  \"userId\": \"{{username}}\",\n  \"addressId\": \"{{address_id}}\",\n  \"status\": \"PENDING\",\n  \"total\": 1499.99,\n  \"items\": [\n    {\n      \"productId\": \"{{product_code}}\",\n      \"quantity\": 1\n    }\n  ]\n}"
             },
             "url": {
               "raw": "{{base_url}}/orders",

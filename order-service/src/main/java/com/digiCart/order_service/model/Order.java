@@ -1,5 +1,9 @@
 package com.digiCart.order_service.model;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -12,17 +16,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
 public class Order {
 
     @Id
-    @Column(name = "order_id", nullable = false, updatable = false)
+    @Column(name = "order_id", nullable = false, updatable = false, length = 6)
     private String orderId;
 
     @Column(name = "user_id", nullable = false)
@@ -68,9 +68,6 @@ public class Order {
 
     @PrePersist
     private void prePersist() {
-        if (this.orderId == null || this.orderId.isBlank()) {
-            this.orderId = UUID.randomUUID().toString();
-        }
         if (this.creationTime == null) {
             this.creationTime = LocalDateTime.now();
         }

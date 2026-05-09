@@ -1,0 +1,108 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Attach to Config Server",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005
+    },
+    {
+      "type": "java",
+      "name": "Attach to Service Registry",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5006
+    },
+    {
+      "type": "java",
+      "name": "Attach to User Service",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5007
+    },
+    {
+      "type": "java",
+      "name": "Attach to Address Service",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5008
+    },
+    {
+      "type": "java",
+      "name": "Attach to Price Service",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5009
+    },
+    {
+      "type": "java",
+      "name": "Attach to Stock Service",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5010
+    },
+    {
+      "type": "java",
+      "name": "Attach to Product Service",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5011
+    },
+    {
+      "type": "java",
+      "name": "Attach to Order Service",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5012
+    },
+    {
+      "type": "java",
+      "name": "Attach to Payment Service",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5013
+    },
+    {
+      "type": "java",
+      "name": "Attach to Notification Service",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5014
+    },
+    {
+      "type": "java",
+      "name": "Attach to Cart Service",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5015
+    },
+    {
+      "type": "java",
+      "name": "Attach to API Gateway",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5016
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Attach to All DigiCart Services",
+      "configurations": [
+        "Attach to Config Server",
+        "Attach to Service Registry",
+        "Attach to User Service",
+        "Attach to Address Service",
+        "Attach to Price Service",
+        "Attach to Stock Service",
+        "Attach to Product Service",
+        "Attach to Order Service",
+        "Attach to Payment Service",
+        "Attach to Notification Service",
+        "Attach to Cart Service",
+        "Attach to API Gateway"
+      ]
+    }
+  ]
+}

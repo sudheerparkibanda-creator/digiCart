@@ -1,5 +1,12 @@
 package com.digiCart.order_service.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import org.springframework.stereotype.Service;
+
 import com.digiCart.order_service.dto.CreateOrderItemRequest;
 import com.digiCart.order_service.dto.CreateOrderRequest;
 import com.digiCart.order_service.dto.OrderItemResponse;
@@ -11,28 +18,27 @@ import com.digiCart.order_service.model.Order;
 import com.digiCart.order_service.model.OrderItem;
 import com.digiCart.order_service.model.OrderStatus;
 import com.digiCart.order_service.repository.OrderRepository;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import org.springframework.stereotype.Service;
 
 @Service
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final NotificationEventProducer notificationEventProducer;
+    private final OrderIdGeneratorService orderIdGeneratorService;
 
     public OrderService(OrderRepository orderRepository,
-                        NotificationEventProducer notificationEventProducer) {
+                        NotificationEventProducer notificationEventProducer,
+                        OrderIdGeneratorService orderIdGeneratorService) {
         this.orderRepository = orderRepository;
         this.notificationEventProducer = notificationEventProducer;
+        this.orderIdGeneratorService = orderIdGeneratorService;
     }
 
     public OrderResponse createOrder(CreateOrderRequest request) {
         validateCreateOrderRequest(request);
 
         Order order = new Order();
+        order.setOrderId(orderIdGeneratorService.nextOrderId());
         order.setUserId(request.getUserId());
         order.setAddressId(request.getAddressId());
         order.setUserEmail(request.getUserEmail());

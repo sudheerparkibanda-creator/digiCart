@@ -1,7 +1,11 @@
 package com.digiCart.user_service.model;
 
-import jakarta.persistence.Column;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,9 +15,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -31,6 +32,9 @@ public class User {
 
     @Column(name = "verification_code")
     private String verificationCode;
+
+    @Column(name = "active", nullable = false)
+    private Boolean active = false;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
@@ -87,6 +91,14 @@ public class User {
 
     public void setVerificationCode(String verificationCode) {
         this.verificationCode = verificationCode;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Role getRole() {

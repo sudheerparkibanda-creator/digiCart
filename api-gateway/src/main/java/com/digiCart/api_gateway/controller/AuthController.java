@@ -1,5 +1,15 @@
 package com.digiCart.api_gateway.controller;
 
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
+
 import com.digiCart.api_gateway.client.UserAuthClient;
 import com.digiCart.api_gateway.dto.AuthResponse;
 import com.digiCart.api_gateway.dto.LoginRequest;
@@ -7,16 +17,6 @@ import com.digiCart.api_gateway.dto.RegisterRequest;
 import com.digiCart.api_gateway.dto.UserAuthVerifyResponse;
 import com.digiCart.api_gateway.dto.UserRegisterResponse;
 import com.digiCart.api_gateway.security.JwtUtil;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.web.client.HttpClientErrorException;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -57,15 +57,16 @@ public class AuthController {
      *
      * <pre>
      * POST /auth/register
-     * { "username": "alice", "password": "secret" }
+     * { "email": "alice@example.com", "name": "Alice", "password": "secret" }
      * </pre>
      */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        if (request.getUsername() == null || request.getUsername().isBlank()
+        if (request.getEmail() == null || request.getEmail().isBlank()
+                || request.getName() == null || request.getName().isBlank()
                 || request.getPassword() == null || request.getPassword().length() < 6) {
             return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Username must not be blank and password must be >= 6 chars"));
+                    .body(Map.of("error", "Email, name, and password are required; password must be >= 6 chars"));
         }
 
         UserRegisterResponse registerResponse;
@@ -73,13 +74,12 @@ public class AuthController {
             registerResponse = userAuthClient.registerUser(request);
         } catch (HttpClientErrorException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("error", "Username already exists or registration failed"));
+                    .body(Map.of("error", "Email already exists or registration failed"));
         }
 
-        String role = registerResponse != null ? registerResponse.getRole() : "Customer";
-        String token = jwtUtil.generateToken(request.getUsername(), role);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new AuthResponse(token, request.getUsername(), role));
+                .body(Map.of("message", "Registration successful. Please check your email to verify your account.", 
+                        "email", request.getEmail()));
     }
 }
 

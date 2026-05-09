@@ -2,6 +2,7 @@ package com.digiCart.notification_service.kafka;
 
 import com.digiCart.notification_service.dto.OrderPlacedNotificationEvent;
 import com.digiCart.notification_service.dto.PaymentSuccessNotificationEvent;
+import com.digiCart.notification_service.dto.UserRegistrationNotificationEvent;
 import com.digiCart.notification_service.service.NotificationEmailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -42,6 +43,17 @@ public class NotificationEventConsumer {
             notificationEmailService.sendPaymentSuccessEmail(event);
         } catch (Exception ex) {
             log.error("Failed to process payment-success notification event: {}", payload, ex);
+        }
+    }
+
+    @KafkaListener(topics = "${app.kafka.topics.user-registration:user-registration}", groupId = "${spring.application.name}")
+    public void onUserRegistration(String payload) {
+        try {
+            UserRegistrationNotificationEvent event = objectMapper.readValue(payload, UserRegistrationNotificationEvent.class);
+            log.info("Received user-registration notification event for email={}", event.getEmail());
+            notificationEmailService.sendUserRegistrationEmail(event);
+        } catch (Exception ex) {
+            log.error("Failed to process user-registration notification event: {}", payload, ex);
         }
     }
 }

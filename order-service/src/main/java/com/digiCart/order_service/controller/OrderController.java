@@ -1,12 +1,8 @@
 package com.digiCart.order_service.controller;
 
-import com.digiCart.order_service.dto.CreateOrderRequest;
-import com.digiCart.order_service.dto.CapturePaymentRequest;
-import com.digiCart.order_service.dto.OrderResponse;
-import com.digiCart.order_service.dto.UpdatePaymentLinkRequest;
-import com.digiCart.order_service.service.OrderService;
 import java.net.URI;
 import java.util.NoSuchElementException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,14 +13,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.digiCart.order_service.dto.CapturePaymentRequest;
+import com.digiCart.order_service.dto.CreateOrderRequest;
+import com.digiCart.order_service.dto.OrderResponse;
+import com.digiCart.order_service.dto.UpdatePaymentLinkRequest;
+import com.digiCart.order_service.service.OrderService;
+import com.digiCart.order_service.util.SecurityUtil;
+
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
 
     private final OrderService orderService;
+    private final SecurityUtil securityUtil;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, SecurityUtil securityUtil) {
         this.orderService = orderService;
+        this.securityUtil = securityUtil;
     }
 
     @PostMapping
@@ -40,7 +45,12 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponse> getOrder(@PathVariable String orderId) {
         try {
-            return ResponseEntity.ok(orderService.getOrder(orderId));
+            OrderResponse orderResponse = orderService.getOrder(orderId);
+            // Verify that the authenticated user owns this order
+            securityUtil.verifyUserMatch(orderResponse.getUserId());
+            return ResponseEntity.ok(orderResponse);
+        } catch (SecurityException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().build();
         } catch (NoSuchElementException ex) {
@@ -52,7 +62,12 @@ public class OrderController {
     public ResponseEntity<OrderResponse> setPaymentLinkIfMissing(@PathVariable String orderId,
                                                                  @RequestBody UpdatePaymentLinkRequest request) {
         try {
+            OrderResponse orderResponse = orderService.getOrder(orderId);
+            // Verify that the authenticated user owns this order
+            securityUtil.verifyUserMatch(orderResponse.getUserId());
             return ResponseEntity.ok(orderService.setPaymentLinkIfMissing(orderId, request.getPaymentLink()));
+        } catch (SecurityException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().build();
         } catch (NoSuchElementException ex) {
@@ -64,7 +79,12 @@ public class OrderController {
     public ResponseEntity<OrderResponse> markPaymentCaptured(@PathVariable String orderId,
                                                              @RequestBody CapturePaymentRequest request) {
         try {
+            OrderResponse orderResponse = orderService.getOrder(orderId);
+            // Verify that the authenticated user owns this order
+            securityUtil.verifyUserMatch(orderResponse.getUserId());
             return ResponseEntity.ok(orderService.markPaymentCaptured(orderId, request.getPaymentId()));
+        } catch (SecurityException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().build();
         } catch (IllegalStateException ex) {
