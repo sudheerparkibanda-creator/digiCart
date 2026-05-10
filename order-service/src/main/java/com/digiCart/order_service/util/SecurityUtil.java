@@ -27,6 +27,12 @@ public class SecurityUtil {
      * @throws SecurityException if the userId does not match the authenticated user
      */
     public void verifyUserMatch(String userId) {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && auth.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_INTERNAL".equals(authority.getAuthority()))) {
+            return;
+        }
+
         String authenticatedUser = getAuthenticatedUsername();
         if (authenticatedUser == null) {
             throw new SecurityException("User not authenticated");

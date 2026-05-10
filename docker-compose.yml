@@ -129,6 +129,8 @@ services:
     <<: *common-service
     build:
       context: ./user-service
+    ports:
+      - "5007:5007"
     environment:
       SPRING_APPLICATION_NAME: user-service
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/user_service_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -158,6 +160,8 @@ services:
     <<: *common-service
     build:
       context: ./address-service
+    ports:
+      - "5008:5008"
     environment:
       SPRING_APPLICATION_NAME: address-service
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/address_service_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -187,6 +191,8 @@ services:
     <<: *common-service
     build:
       context: ./price-service
+    ports:
+      - "5009:5009"
     environment:
       SPRING_APPLICATION_NAME: price-service
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/price_service_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -216,6 +222,8 @@ services:
     <<: *common-service
     build:
       context: ./stock-service
+    ports:
+      - "5010:5010"
     environment:
       SPRING_APPLICATION_NAME: stock-service
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/stock_service_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -245,6 +253,8 @@ services:
     <<: *common-service
     build:
       context: ./product-service
+    ports:
+      - "5011:5011"
     environment:
       SPRING_APPLICATION_NAME: product-service
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/product_service_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -278,6 +288,8 @@ services:
     <<: *common-service
     build:
       context: ./order-service
+    ports:
+      - "5012:5012"
     environment:
       SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
       SPRING_APPLICATION_NAME: order-service
@@ -309,6 +321,8 @@ services:
     <<: *common-service
     build:
       context: ./payment-service
+    ports:
+      - "5013:5013"
     environment:
       SPRING_APPLICATION_NAME: payment-service
       SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
@@ -340,6 +354,8 @@ services:
     <<: *common-service
     build:
       context: ./notification-service
+    ports:
+      - "5014:5014"
     environment:
       SPRING_APPLICATION_NAME: notification-service
       SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
@@ -375,6 +391,8 @@ services:
     <<: *common-service
     build:
       context: ./cart-service
+    ports:
+      - "5015:5015"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cart_service_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root

@@ -20,7 +20,7 @@ public class CustomerServiceClient {
 
     public void addAddressToCustomer(String customerId, String addressId) {
         try {
-            restTemplate.postForEntity(baseUrl + "/users/" + customerId + "/addresses/" + addressId, null, Void.class);
+            restTemplate.postForEntity(baseUrl + "/internal/users/" + customerId + "/addresses/" + addressId, null, Void.class);
         } catch (RestClientException ex) {
             throw new IllegalStateException("Unable to add address to customer", ex);
         }
@@ -28,7 +28,7 @@ public class CustomerServiceClient {
 
     public void setDefaultAddress(String customerId, String addressId) {
         try {
-            restTemplate.put(baseUrl + "/users/" + customerId + "/default-address/" + addressId, null);
+            restTemplate.put(baseUrl + "/internal/users/" + customerId + "/default-address/" + addressId, null);
         } catch (RestClientException ex) {
             throw new IllegalStateException("Unable to set default address for customer", ex);
         }

@@ -1,16 +1,18 @@
 package com.digiCart.cart_service.service;
 
-import com.digiCart.cart_service.model.Cart;
-import com.digiCart.cart_service.model.CartItem;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import com.digiCart.cart_service.model.Cart;
+import com.digiCart.cart_service.model.CartItem;
 
 @Component
 public class OrderServiceClient {
@@ -30,12 +32,7 @@ public class OrderServiceClient {
     public OrderData createOrderFromCart(Cart cart, String status) {
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("userId", cart.getUserId());
-
-        String userEmail = fetchUserEmail(cart.getUserId());
-        if (userEmail != null && !userEmail.isBlank()) {
-            payload.put("userEmail", userEmail);
-        }
-
+        payload.put("userEmail", cart.getUserId());
         payload.put("addressId", cart.getAddressId());
         payload.put("status", status);
         payload.put("total", cart.getTotal());
@@ -62,38 +59,20 @@ public class OrderServiceClient {
             data.setOrderId(response.get("orderId").toString());
             Object responseStatus = response.get("status");
             data.setStatus(responseStatus == null ? status : responseStatus.toString());
+            Object paymentLink = response.get("paymentLink");
+            if (paymentLink != null) {
+                data.setPaymentLink(paymentLink.toString());
+            }
             return data;
         } catch (RestClientException ex) {
             throw new IllegalStateException("Unable to create order", ex);
         }
     }
 
-    private String fetchUserEmail(String userId) {
-        if (userId == null || userId.isBlank()) {
-            return null;
-        }
-        try {
-            Map<?, ?> response = restTemplate.getForObject(userServiceBaseUrl + "/internal/users/" + userId, Map.class);
-            if (response == null) {
-                return null;
-            }
-            Object email = response.get("email");
-            if (email instanceof String && !((String) email).isBlank()) {
-                return (String) email;
-            }
-            Object username = response.get("username");
-            if (username instanceof String) {
-                return (String) username;
-            }
-            return null;
-        } catch (RestClientException ex) {
-            return null;
-        }
-    }
-
     public static class OrderData {
         private String orderId;
         private String status;
+        private String paymentLink;
 
         public String getOrderId() {
             return orderId;
@@ -109,6 +88,14 @@ public class OrderServiceClient {
 
         public void setStatus(String status) {
             this.status = status;
+        }
+
+        public String getPaymentLink() {
+            return paymentLink;
+        }
+
+        public void setPaymentLink(String paymentLink) {
+            this.paymentLink = paymentLink;
         }
     }
 }

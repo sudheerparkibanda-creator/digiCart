@@ -4,6 +4,8 @@ import com.digiCart.user_service.service.UserAuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,5 +32,21 @@ public class InternalUserController {
                         "email", user.getName()
                 )))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{userId}/addresses/{addressId}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Void> addAddressToUser(@PathVariable String userId,
+                                                 @PathVariable String addressId) {
+        userAuthService.addAddressToUser(userId, addressId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{userId}/default-address/{addressId}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Void> setDefaultAddressForUser(@PathVariable String userId,
+                                                         @PathVariable String addressId) {
+        userAuthService.setDefaultAddressForUser(userId, addressId);
+        return ResponseEntity.ok().build();
     }
 }

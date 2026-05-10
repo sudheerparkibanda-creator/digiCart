@@ -25,13 +25,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final NotificationEventProducer notificationEventProducer;
     private final OrderIdGeneratorService orderIdGeneratorService;
+    private final PaymentServiceClient paymentServiceClient;
 
     public OrderService(OrderRepository orderRepository,
                         NotificationEventProducer notificationEventProducer,
-                        OrderIdGeneratorService orderIdGeneratorService) {
+                        OrderIdGeneratorService orderIdGeneratorService,
+                        PaymentServiceClient paymentServiceClient) {
         this.orderRepository = orderRepository;
         this.notificationEventProducer = notificationEventProducer;
         this.orderIdGeneratorService = orderIdGeneratorService;
+        this.paymentServiceClient = paymentServiceClient;
     }
 
     public OrderResponse createOrder(CreateOrderRequest request) {
@@ -58,6 +61,11 @@ public class OrderService {
         order.setItems(items);
 
         Order saved = orderRepository.save(order);
+        String paymentLink = paymentServiceClient.ensurePaymentLink(saved.getOrderId());
+        if (paymentLink != null && !paymentLink.isBlank()) {
+            saved.setPaymentLink(paymentLink);
+            saved = orderRepository.save(saved);
+        }
 
         if (saved.getUserEmail() != null && !saved.getUserEmail().isBlank()) {
             OrderPlacedNotificationEvent event = new OrderPlacedNotificationEvent();

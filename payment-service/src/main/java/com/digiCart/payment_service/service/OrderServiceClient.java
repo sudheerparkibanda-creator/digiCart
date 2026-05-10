@@ -2,8 +2,10 @@ package com.digiCart.payment_service.service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,12 +28,20 @@ public class OrderServiceClient {
     }
 
     public OrderData getOrder(String orderId) {
+        HttpHeaders headers = createInternalHeaders();
         try {
-            Map<?, ?> response = restTemplate.getForObject(baseUrl + "/orders/" + orderId, Map.class);
-            if (response == null || response.get("orderId") == null) {
+            HttpEntity<Void> request = new HttpEntity<>(headers);
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                    baseUrl + "/orders/" + orderId,
+                    HttpMethod.GET,
+                    request,
+                    new ParameterizedTypeReference<>() {}
+            );
+            Map<?, ?> body = response.getBody();
+            if (body == null || body.get("orderId") == null) {
                 throw new IllegalStateException("Order not found for id: " + orderId);
             }
-            return toOrderData(response);
+            return toOrderData(body);
         } catch (RestClientException ex) {
             throw new IllegalStateException("Unable to fetch order", ex);
         }
@@ -41,16 +51,14 @@ public class OrderServiceClient {
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("paymentLink", paymentLink);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
+        HttpHeaders headers = createInternalHeaders();
         try {
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
-            ResponseEntity<Map> response = restTemplate.exchange(
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     baseUrl + "/orders/" + orderId + "/payment-link",
                     HttpMethod.PATCH,
                     request,
-                    Map.class
+                    new ParameterizedTypeReference<>() {}
             );
             if (response.getBody() == null) {
                 throw new IllegalStateException("Order update response is empty");
@@ -65,16 +73,14 @@ public class OrderServiceClient {
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("paymentId", paymentId);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
+        HttpHeaders headers = createInternalHeaders();
         try {
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
-            ResponseEntity<Map> response = restTemplate.exchange(
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     baseUrl + "/orders/" + orderId + "/payment-captured",
                     HttpMethod.PATCH,
                     request,
-                    Map.class
+                    new ParameterizedTypeReference<>() {}
             );
             if (response.getBody() == null) {
                 throw new IllegalStateException("Order payment capture response is empty");
@@ -96,6 +102,13 @@ public class OrderServiceClient {
             orderData.setTotal(number.doubleValue());
         }
         return orderData;
+    }
+
+    private HttpHeaders createInternalHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("X-Internal-Auth", "true");
+        return headers;
     }
 
     public static class OrderData {

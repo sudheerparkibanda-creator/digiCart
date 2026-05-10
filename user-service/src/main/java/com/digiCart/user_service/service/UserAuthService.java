@@ -167,5 +167,40 @@ public class UserAuthService {
     public Optional<User> getUserById(String userId) {
         return userRepository.findById(userId);
     }
+
+    public void addAddressToUser(String userId, String addressId) {
+        if (userId == null || userId.isBlank()) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+        if (addressId == null || addressId.isBlank()) {
+            throw new IllegalArgumentException("Address ID is required");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+
+        if (!user.getAddressIds().contains(addressId)) {
+            user.getAddressIds().add(addressId);
+            userRepository.save(user);
+        }
+    }
+
+    public void setDefaultAddressForUser(String userId, String addressId) {
+        if (userId == null || userId.isBlank()) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+        if (addressId == null || addressId.isBlank()) {
+            throw new IllegalArgumentException("Address ID is required");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+
+        if (!user.getAddressIds().contains(addressId)) {
+            user.getAddressIds().add(addressId);
+        }
+        user.setDefaultAddressId(addressId);
+        userRepository.save(user);
+    }
 }
 

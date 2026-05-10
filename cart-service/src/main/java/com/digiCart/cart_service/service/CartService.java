@@ -1,5 +1,15 @@
 package com.digiCart.cart_service.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
 import com.digiCart.cart_service.dto.AddToCartRequest;
 import com.digiCart.cart_service.dto.CartItemResponse;
 import com.digiCart.cart_service.dto.CartResponse;
@@ -8,18 +18,10 @@ import com.digiCart.cart_service.dto.PlaceOrderResponse;
 import com.digiCart.cart_service.dto.ProductDetailsResponse;
 import com.digiCart.cart_service.dto.SetExistingDeliveryAddressRequest;
 import com.digiCart.cart_service.dto.SetNewDeliveryAddressRequest;
-import java.util.UUID;
 import com.digiCart.cart_service.model.Cart;
 import com.digiCart.cart_service.model.CartItem;
 import com.digiCart.cart_service.model.CartStatus;
 import com.digiCart.cart_service.repository.CartRepository;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import org.springframework.stereotype.Service;
 
 @Service
 public class CartService {
@@ -141,14 +143,13 @@ public class CartService {
         validateStockForCheckout(cart.getItems());
 
         OrderServiceClient.OrderData orderData = orderServiceClient.createOrderFromCart(cart, "PaymentPending");
-        String paymentLink = paymentServiceClient.ensurePaymentLink(orderData.getOrderId());
         cartRepository.delete(cart);
 
         PlaceOrderResponse response = new PlaceOrderResponse();
         response.setOrderId(orderData.getOrderId());
         response.setCartId(cart.getCartId());
         response.setStatus(orderData.getStatus());
-        response.setPaymentLink(paymentLink);
+        response.setPaymentLink(orderData.getPaymentLink());
         response.setTotal(cart.getTotal());
         return response;
     }
