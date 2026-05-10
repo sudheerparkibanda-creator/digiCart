@@ -38,6 +38,7 @@ public class OrderService {
     }
 
     public OrderResponse createOrder(CreateOrderRequest request) {
+        System.out.println("OrderService.createOrder called with request: " + request);
         validateCreateOrderRequest(request);
 
         Order order = new Order();

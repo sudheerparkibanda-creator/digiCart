@@ -41,7 +41,7 @@ user-service:
   base-url: http://user-service
 
 order-service:
-  base-url: http://order-service
+  base-url: http://order-service:8087
 
 payment-service:
   base-url: http://payment-service

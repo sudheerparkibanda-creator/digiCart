@@ -289,7 +289,7 @@ services:
     build:
       context: ./order-service
     ports:
-      - "5012:5012"
+      - "5012:8087"
     environment:
       SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
       SPRING_APPLICATION_NAME: order-service
