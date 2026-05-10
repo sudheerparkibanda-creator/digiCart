@@ -7,12 +7,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/test")
 public class TestController {
 
+    private static final Logger log = LoggerFactory.getLogger(TestController.class);
+
     @PostMapping("/send-order-notification")
     public ResponseEntity<String> sendOrderNotification(@RequestBody OrderPlacedNotificationEvent event) {
+        log.info("Entering sendOrderNotification with event: {}", event);
         try {
             // Just log the event for testing, don't actually send email
             System.out.println("Received notification event: " + event);

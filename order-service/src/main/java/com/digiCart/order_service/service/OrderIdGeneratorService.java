@@ -2,6 +2,9 @@ package com.digiCart.order_service.service;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.digiCart.order_service.model.OrderSequence;
@@ -20,8 +23,11 @@ public class OrderIdGeneratorService {
         this.orderRepository = orderRepository;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(OrderIdGeneratorService.class);
+
     @Transactional
     public String nextOrderId() {
+        log.info("Entering nextOrderId");
         long currentValue = determineCurrentOrderId();
         try {
             sequenceRepository.save(new OrderSequence(SEQUENCE_NAME, currentValue + 1));

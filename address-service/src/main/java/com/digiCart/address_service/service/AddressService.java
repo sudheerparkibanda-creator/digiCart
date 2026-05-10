@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class AddressService {
 
@@ -15,11 +18,15 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(AddressService.class);
+
     public List<Address> getAllAddresses() {
+        log.info("Entering getAllAddresses");
         return addressRepository.findAll();
     }
 
     public Optional<Address> getAddressById(String addressId) {
+        log.info("Entering getAddressById with addressId: {}", addressId);
         if (addressId == null || addressId.isBlank()) {
             return Optional.empty();
         }
@@ -27,6 +34,7 @@ public class AddressService {
     }
 
     public Address addAddress(Address address) {
+        log.info("Entering addAddress with address: {}", address);
         address.setAddressId(null);
         if (address.getCountry() == null || address.getCountry().isBlank()) {
             address.setCountry("India");
@@ -35,6 +43,7 @@ public class AddressService {
     }
 
     public Optional<Address> updateAddress(String addressId, Address updated) {
+        log.info("Entering updateAddress with addressId: {}, updated: {}", addressId, updated);
         return addressRepository.findById(addressId).map(existing -> {
             existing.setFullName(updated.getFullName());
             existing.setMobileNumber(updated.getMobileNumber());
@@ -54,6 +63,7 @@ public class AddressService {
     }
 
     public Optional<Address> removeAddress(String addressId) {
+        log.info("Entering removeAddress with addressId: {}", addressId);
         Optional<Address> existing = addressRepository.findById(addressId);
         existing.ifPresent(addressRepository::delete);
         return existing;

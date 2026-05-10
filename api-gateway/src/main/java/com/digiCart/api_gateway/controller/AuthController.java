@@ -19,6 +19,9 @@ import com.digiCart.api_gateway.dto.UserAuthVerifyResponse;
 import com.digiCart.api_gateway.dto.UserRegisterResponse;
 import com.digiCart.api_gateway.security.JwtUtil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -32,6 +35,8 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+
     /**
      * Authenticate with username + password and receive a JWT.
      *
@@ -42,6 +47,7 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        log.info("Entering login with request: {}", request);
         UserAuthVerifyResponse verification = userAuthClient.verifyCredentials(request);
         if (verification == null || !verification.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -63,6 +69,7 @@ public class AuthController {
      */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        log.info("Entering register with request: {}", request);
         if (request.getEmail() == null || request.getEmail().isBlank()
                 || request.getName() == null || request.getName().isBlank()
                 || request.getPassword() == null || request.getPassword().length() < 6) {
@@ -85,6 +92,7 @@ public class AuthController {
 
     @PostMapping("/activate")
     public ResponseEntity<?> activate(@RequestBody ActivationRequest request) {
+        log.info("Entering activate with request: {}", request);
         if (request.getEmail() == null || request.getEmail().isBlank()
                 || request.getVerificationCode() == null || request.getVerificationCode().isBlank()) {
             return ResponseEntity.badRequest()

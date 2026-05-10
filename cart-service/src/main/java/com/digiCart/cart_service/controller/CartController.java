@@ -23,6 +23,9 @@ import com.digiCart.cart_service.dto.SetNewDeliveryAddressRequest;
 import com.digiCart.cart_service.service.CartService;
 import com.digiCart.cart_service.util.SecurityUtil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/{customerId}/carts")
 public class CartController {
@@ -35,8 +38,11 @@ public class CartController {
         this.securityUtil = securityUtil;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(CartController.class);
+
     @PostMapping
     public ResponseEntity<CartResponse> createCart(@PathVariable String customerId) {
+        log.info("Entering createCart with customerId: {}", customerId);
         try {
             securityUtil.verifyUserMatch(customerId);
             return ResponseEntity.status(HttpStatus.CREATED).body(cartService.createCart(customerId));
@@ -49,6 +55,7 @@ public class CartController {
 
     @GetMapping
     public ResponseEntity<List<CartResponse>> getAllCartsForCustomer(@PathVariable String customerId) {
+        log.info("Entering getAllCartsForCustomer with customerId: {}", customerId);
         try {
             securityUtil.verifyUserMatch(customerId);
             return ResponseEntity.ok(cartService.getAllCartsForCustomer(customerId));
@@ -63,6 +70,7 @@ public class CartController {
     public ResponseEntity<CartResponse> setDeliveryAddressFromNewAddress(@PathVariable String customerId,
                                                                           @PathVariable String cartId,
                                                                           @RequestBody SetNewDeliveryAddressRequest request) {
+        log.info("Entering setDeliveryAddressFromNewAddress with customerId: {}, cartId: {}, request: {}", customerId, cartId, request);
         try {
             securityUtil.verifyUserMatch(customerId);
             return ResponseEntity.ok(cartService.setDeliveryAddressFromNewAddress(customerId, cartId, request));
@@ -81,6 +89,7 @@ public class CartController {
     public ResponseEntity<CartResponse> setDeliveryAddressFromExistingAddress(@PathVariable String customerId,
                                                                                @PathVariable String cartId,
                                                                                @RequestBody SetExistingDeliveryAddressRequest request) {
+        log.info("Entering setDeliveryAddressFromExistingAddress with customerId: {}, cartId: {}, request: {}", customerId, cartId, request);
         try {
             securityUtil.verifyUserMatch(customerId);
             return ResponseEntity.ok(cartService.setDeliveryAddressFromExistingAddress(customerId, cartId, request));
@@ -99,6 +108,7 @@ public class CartController {
     public ResponseEntity<CartResponse> addToCart(@PathVariable String customerId,
                                                   @PathVariable String cartId,
                                                   @RequestBody AddToCartRequest request) {
+        log.info("Entering addToCart with customerId: {}, cartId: {}, request: {}", customerId, cartId, request);
         try {
             securityUtil.verifyUserMatch(customerId);
             return ResponseEntity.ok(cartService.addToCart(customerId, cartId, request));
@@ -116,6 +126,7 @@ public class CartController {
     @PostMapping("/{cartId}/place-order")
     public ResponseEntity<PlaceOrderResponse> placeOrder(@PathVariable String customerId,
                                                          @PathVariable String cartId) {
+        log.info("Entering placeOrder with customerId: {}, cartId: {}", customerId, cartId);
         try {
             securityUtil.verifyUserMatch(customerId);
             return ResponseEntity.status(HttpStatus.CREATED).body(cartService.placeOrder(customerId, cartId));
@@ -135,6 +146,7 @@ public class CartController {
                                                          @PathVariable String cartId,
                                                          @PathVariable Integer entryNumber,
                                                          @RequestBody EntryQuantityRequest request) {
+        log.info("Entering addEntryQuantity with customerId: {}, cartId: {}, entryNumber: {}, request: {}", customerId, cartId, entryNumber, request);
         try {
             securityUtil.verifyUserMatch(customerId);
             return ResponseEntity.ok(cartService.addEntryQuantity(customerId, cartId, entryNumber, request));
@@ -154,6 +166,7 @@ public class CartController {
                                                             @PathVariable String cartId,
                                                             @PathVariable Integer entryNumber,
                                                             @RequestBody EntryQuantityRequest request) {
+        log.info("Entering removeEntryQuantity with customerId: {}, cartId: {}, entryNumber: {}, request: {}", customerId, cartId, entryNumber, request);
         try {
             securityUtil.verifyUserMatch(customerId);
             return ResponseEntity.ok(cartService.removeEntryQuantity(customerId, cartId, entryNumber, request));
@@ -170,6 +183,7 @@ public class CartController {
     public ResponseEntity<CartResponse> removeEntry(@PathVariable String customerId,
                                                     @PathVariable String cartId,
                                                     @PathVariable Integer entryNumber) {
+        log.info("Entering removeEntry with customerId: {}, cartId: {}, entryNumber: {}", customerId, cartId, entryNumber);
         try {
             securityUtil.verifyUserMatch(customerId);
             return ResponseEntity.ok(cartService.removeEntryByEntryNumber(customerId, cartId, entryNumber));
@@ -185,6 +199,7 @@ public class CartController {
     @DeleteMapping("/{cartId}")
     public ResponseEntity<Void> deleteCart(@PathVariable String customerId,
                                            @PathVariable String cartId) {
+        log.info("Entering deleteCart with customerId: {}, cartId: {}", customerId, cartId);
         try {
             securityUtil.verifyUserMatch(customerId);
             cartService.deleteCart(customerId, cartId);

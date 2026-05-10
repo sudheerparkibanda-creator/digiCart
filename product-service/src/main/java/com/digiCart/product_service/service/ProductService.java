@@ -13,8 +13,13 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class ProductService {
+
+    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
 
     private final ProductRepository productRepository;
     private final PriceServiceClient priceServiceClient;
@@ -29,6 +34,7 @@ public class ProductService {
     }
 
     public List<Product> getAllProducts() {
+        log.info("Entering getAllProducts");
         List<Product> products = productRepository.findAll();
         List<String> codes = products.stream()
                 .map(Product::getCode)
@@ -46,6 +52,7 @@ public class ProductService {
     }
 
     public Optional<Product> getByCode(String code) {
+        log.info("Entering getByCode with code: {}", code);
         Optional<Product> product = findPersistedByCode(code);
         product.ifPresent(found -> {
             found.setPriceRow(priceServiceClient.getByProductCode(found.getCode()));

@@ -5,6 +5,9 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -16,6 +19,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 public class PermissionCheckAspect {
 
+    private static final Logger log = LoggerFactory.getLogger(PermissionCheckAspect.class);
+
     private final AuthorizationService authorizationService;
 
     public PermissionCheckAspect(AuthorizationService authorizationService) {
@@ -24,6 +29,7 @@ public class PermissionCheckAspect {
 
     @Before("@annotation(requirePermission)")
     public void checkPermission(JoinPoint joinPoint, RequirePermission requirePermission) throws Throwable {
+        log.info("Entering checkPermission with requirePermission: {}", requirePermission);
         // Get user ID from request header
         String userId = getUserIdFromRequest();
 

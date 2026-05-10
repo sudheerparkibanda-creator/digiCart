@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class PaymentLinkService {
 
@@ -21,7 +24,10 @@ public class PaymentLinkService {
         this.objectMapper = objectMapper;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(PaymentLinkService.class);
+
     public EnsurePaymentLinkResponse ensurePaymentLink(String orderId) {
+        log.info("Entering ensurePaymentLink with orderId: {}", orderId);
         OrderServiceClient.OrderData order = orderServiceClient.getOrder(orderId);
 
         if (order.getPaymentLink() != null && !order.getPaymentLink().isBlank()) {
@@ -45,6 +51,7 @@ public class PaymentLinkService {
     }
 
     public void processWebhook(String rawPayload) {
+        log.info("Entering processWebhook with rawPayload: {}", rawPayload);
         Map<String, Object> event = parsePayload(rawPayload);
         String eventType = asString(event.get("event"));
 

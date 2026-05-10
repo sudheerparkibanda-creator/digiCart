@@ -10,6 +10,9 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.digiCart.cart_service.dto.AddToCartRequest;
 import com.digiCart.cart_service.dto.CartItemResponse;
 import com.digiCart.cart_service.dto.CartResponse;
@@ -25,6 +28,8 @@ import com.digiCart.cart_service.repository.CartRepository;
 
 @Service
 public class CartService {
+
+    private static final Logger log = LoggerFactory.getLogger(CartService.class);
 
     private final CartRepository cartRepository;
     private final PriceServiceClient priceServiceClient;
@@ -54,6 +59,7 @@ public class CartService {
     }
 
     public CartResponse createCart(String customerId) {
+        log.info("Entering createCart with customerId: {}", customerId);
         validateCustomerId(customerId);
 
         Cart cart = new Cart();
@@ -70,6 +76,7 @@ public class CartService {
     }
 
     public void deleteCart(String customerId, String cartId) {
+        log.info("Entering deleteCart with customerId: {}, cartId: {}", customerId, cartId);
         validateCartOwnershipRequest(customerId, cartId);
 
         Cart cart = getOwnedCart(customerId, cartId);
@@ -77,6 +84,7 @@ public class CartService {
     }
 
     public List<CartResponse> getAllCartsForCustomer(String customerId) {
+        log.info("Entering getAllCartsForCustomer with customerId: {}", customerId);
         validateCustomerId(customerId);
 
         List<Cart> carts = cartRepository.findByUserId(customerId);
@@ -92,6 +100,7 @@ public class CartService {
     public CartResponse setDeliveryAddressFromNewAddress(String customerId,
                                                          String cartId,
                                                          SetNewDeliveryAddressRequest request) {
+        log.info("Entering setDeliveryAddressFromNewAddress with customerId: {}, cartId: {}, request: {}", customerId, cartId, request);
         validateNewAddressRequest(customerId, cartId, request);
 
         Cart cart = getOwnedCart(customerId, cartId);
@@ -110,6 +119,7 @@ public class CartService {
     public CartResponse setDeliveryAddressFromExistingAddress(String customerId,
                                                               String cartId,
                                                               SetExistingDeliveryAddressRequest request) {
+        log.info("Entering setDeliveryAddressFromExistingAddress with customerId: {}, cartId: {}, request: {}", customerId, cartId, request);
         validateExistingAddressRequest(customerId, cartId, request);
 
         if (!addressServiceClient.addressExists(request.getAddressId())) {
@@ -128,6 +138,7 @@ public class CartService {
     }
 
     public PlaceOrderResponse placeOrder(String customerId, String cartId) {
+        log.info("Entering placeOrder with customerId: {}, cartId: {}", customerId, cartId);
         validateCartOwnershipRequest(customerId, cartId);
 
         Cart cart = getOwnedCart(customerId, cartId);
@@ -155,6 +166,7 @@ public class CartService {
     }
 
     public CartResponse addToCart(String customerId, String cartId, AddToCartRequest request) {
+        log.info("Entering addToCart with customerId: {}, cartId: {}, request: {}", customerId, cartId, request);
         validateRequest(customerId, cartId, request);
 
         Cart cart = getOwnedCart(customerId, cartId);
@@ -197,6 +209,7 @@ public class CartService {
                                          String cartId,
                                          Integer entryNumber,
                                          EntryQuantityRequest request) {
+        log.info("Entering addEntryQuantity with customerId: {}, cartId: {}, entryNumber: {}, request: {}", customerId, cartId, entryNumber, request);
         validateQuantityUpdateRequest(customerId, cartId, entryNumber, request);
 
         Cart cart = getOwnedCart(customerId, cartId);
@@ -232,6 +245,7 @@ public class CartService {
                                             String cartId,
                                             Integer entryNumber,
                                             EntryQuantityRequest request) {
+        log.info("Entering removeEntryQuantity with customerId: {}, cartId: {}, entryNumber: {}, request: {}", customerId, cartId, entryNumber, request);
         validateQuantityUpdateRequest(customerId, cartId, entryNumber, request);
 
         Cart cart = getOwnedCart(customerId, cartId);
@@ -255,6 +269,7 @@ public class CartService {
     }
 
     public CartResponse removeEntryByEntryNumber(String customerId, String cartId, Integer entryNumber) {
+        log.info("Entering removeEntryByEntryNumber with customerId: {}, cartId: {}, entryNumber: {}", customerId, cartId, entryNumber);
         validateEntryRequest(customerId, cartId, entryNumber);
 
         Cart cart = getOwnedCart(customerId, cartId);

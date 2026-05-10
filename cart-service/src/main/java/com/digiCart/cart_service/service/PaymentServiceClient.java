@@ -13,8 +13,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class PaymentServiceClient {
+
+    private static final Logger log = LoggerFactory.getLogger(PaymentServiceClient.class);
 
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
@@ -33,6 +38,7 @@ public class PaymentServiceClient {
     }
 
     public String ensurePaymentLink(String orderId) {
+        log.info("Entering ensurePaymentLink with orderId: {}", orderId);
         String requestId = UUID.randomUUID().toString();
         CompletableFuture<PaymentLinkResponseEvent> future = new CompletableFuture<>();
         pendingRequests.put(requestId, future);
@@ -69,6 +75,7 @@ public class PaymentServiceClient {
     }
 
     void completeResponse(PaymentLinkResponseEvent responseEvent) {
+        log.info("Entering completeResponse with responseEvent: {}", responseEvent);
         if (responseEvent == null || responseEvent.getRequestId() == null) {
             return;
         }

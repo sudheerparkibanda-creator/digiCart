@@ -9,6 +9,9 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class StockService {
 
@@ -18,11 +21,15 @@ public class StockService {
         this.stockRepository = stockRepository;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(StockService.class);
+
     public List<Stock> getAllStocks() {
+        log.info("Entering getAllStocks");
         return stockRepository.findAll();
     }
 
     public Optional<Stock> getByProductId(String productId) {
+        log.info("Entering getByProductId with productId: {}", productId);
         if (productId == null || productId.isBlank()) {
             return Optional.empty();
         }
@@ -35,6 +42,7 @@ public class StockService {
     }
 
     public List<Stock> getByProductIds(List<String> productIds) {
+        log.info("Entering getByProductIds with productIds: {}", productIds);
         if (productIds == null || productIds.isEmpty()) {
             return Collections.emptyList();
         }
@@ -44,6 +52,7 @@ public class StockService {
     }
 
     public UpsertResult upsert(Stock request) {
+        log.info("Entering upsert with request: {}", request);
         String productId = request.getProductId();
         if (productId == null || productId.isBlank()) {
             throw new IllegalArgumentException("productId must not be blank");
@@ -67,6 +76,7 @@ public class StockService {
     }
 
     public Optional<Stock> removeByProductId(String productId) {
+        log.info("Entering removeByProductId with productId: {}", productId);
         Optional<Stock> existing = getByProductId(productId);
         existing.ifPresent(stockRepository::delete);
         return existing;

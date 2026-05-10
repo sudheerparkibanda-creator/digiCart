@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.digiCart.user_service.service.UserAuthService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/users")
 public class UserAddressController {
@@ -21,6 +24,8 @@ public class UserAddressController {
     public UserAddressController(UserAuthService userAuthService) {
         this.userAuthService = userAuthService;
     }
+
+    private static final Logger log = LoggerFactory.getLogger(UserAddressController.class);
 
     /**
      * Add address to user's address list.
@@ -33,6 +38,7 @@ public class UserAddressController {
     @PostMapping("/{customerId}/addresses/{addressId}")
     public ResponseEntity<?> addAddressToCustomer(@PathVariable String customerId,
                                                    @PathVariable String addressId) {
+        log.info("Entering addAddressToCustomer with customerId: {}, addressId: {}", customerId, addressId);
         try {
             userAuthService.addAddressToUser(customerId, addressId);
             return ResponseEntity.ok(Map.of("message", "Address added to customer successfully"));
@@ -55,6 +61,7 @@ public class UserAddressController {
     @PutMapping("/{customerId}/default-address/{addressId}")
     public ResponseEntity<?> setDefaultAddress(@PathVariable String customerId,
                                                @PathVariable String addressId) {
+        log.info("Entering setDefaultAddress with customerId: {}, addressId: {}", customerId, addressId);
         try {
             userAuthService.setDefaultAddressForUser(customerId, addressId);
             return ResponseEntity.ok(Map.of("message", "Default address set successfully"));

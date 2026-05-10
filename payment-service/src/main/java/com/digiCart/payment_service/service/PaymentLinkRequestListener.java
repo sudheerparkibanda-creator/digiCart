@@ -7,8 +7,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class PaymentLinkRequestListener {
+
+    private static final Logger log = LoggerFactory.getLogger(PaymentLinkRequestListener.class);
 
     private final ObjectMapper objectMapper;
     private final PaymentLinkService paymentLinkService;
@@ -24,6 +29,7 @@ public class PaymentLinkRequestListener {
 
     @KafkaListener(topics = "${app.kafka.topics.payment-link-request}", groupId = "${spring.application.name}")
     public void onMessage(String payload) {
+        log.info("Entering onMessage with payload: {}", payload);
         PaymentLinkResponseEvent responseEvent = new PaymentLinkResponseEvent();
         try {
             PaymentLinkRequestEvent requestEvent = objectMapper.readValue(payload, PaymentLinkRequestEvent.class);

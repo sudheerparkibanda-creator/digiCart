@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/internal/users")
 public class InternalUserController {
@@ -22,9 +25,12 @@ public class InternalUserController {
         this.userAuthService = userAuthService;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(InternalUserController.class);
+
     @GetMapping("/{userId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Map<String, String>> getUserById(@PathVariable String userId) {
+        log.info("Entering getUserById with userId: {}", userId);
         return userAuthService.getUserById(userId)
                 .map(user -> ResponseEntity.ok(Map.of(
                         "userId", user.getUId(),
@@ -38,6 +44,7 @@ public class InternalUserController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> addAddressToUser(@PathVariable String userId,
                                                  @PathVariable String addressId) {
+        log.info("Entering addAddressToUser with userId: {}, addressId: {}", userId, addressId);
         userAuthService.addAddressToUser(userId, addressId);
         return ResponseEntity.ok().build();
     }
@@ -46,6 +53,7 @@ public class InternalUserController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> setDefaultAddressForUser(@PathVariable String userId,
                                                          @PathVariable String addressId) {
+        log.info("Entering setDefaultAddressForUser with userId: {}, addressId: {}", userId, addressId);
         userAuthService.setDefaultAddressForUser(userId, addressId);
         return ResponseEntity.ok().build();
     }

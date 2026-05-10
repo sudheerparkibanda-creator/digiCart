@@ -10,16 +10,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.List;
 
 @Component
 public class SecurityContextFilter extends OncePerRequestFilter {
 
+    private static final Logger log = LoggerFactory.getLogger(SecurityContextFilter.class);
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        log.info("Entering doFilterInternal with request URI: {}", request.getRequestURI());
 
         String username = request.getHeader("X-Auth-Username");
         String role = request.getHeader("X-Auth-Role");

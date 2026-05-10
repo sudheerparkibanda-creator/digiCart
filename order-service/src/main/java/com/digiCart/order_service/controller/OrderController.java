@@ -19,6 +19,9 @@ import com.digiCart.order_service.dto.OrderResponse;
 import com.digiCart.order_service.dto.UpdatePaymentLinkRequest;
 import com.digiCart.order_service.service.OrderService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -29,8 +32,11 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
+
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
+        log.info("Entering createOrder with request: {}", request);
         try {
             OrderResponse response = orderService.createOrder(request);
             return ResponseEntity.created(URI.create("/orders/" + response.getOrderId())).body(response);
@@ -41,6 +47,7 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponse> getOrder(@PathVariable String orderId) {
+        log.info("Entering getOrder with orderId: {}", orderId);
         try {
             OrderResponse orderResponse = orderService.getOrder(orderId);
             return ResponseEntity.ok(orderResponse);
@@ -54,6 +61,7 @@ public class OrderController {
     @PatchMapping("/{orderId}/payment-link")
     public ResponseEntity<OrderResponse> setPaymentLinkIfMissing(@PathVariable String orderId,
                                                                  @RequestBody UpdatePaymentLinkRequest request) {
+        log.info("Entering setPaymentLinkIfMissing with orderId: {}, request: {}", orderId, request);
         try {
             return ResponseEntity.ok(orderService.setPaymentLinkIfMissing(orderId, request.getPaymentLink()));
         } catch (IllegalArgumentException ex) {
@@ -66,6 +74,7 @@ public class OrderController {
     @PatchMapping("/{orderId}/payment-captured")
     public ResponseEntity<OrderResponse> markPaymentCaptured(@PathVariable String orderId,
                                                              @RequestBody CapturePaymentRequest request) {
+        log.info("Entering markPaymentCaptured with orderId: {}, request: {}", orderId, request);
         try {
             return ResponseEntity.ok(orderService.markPaymentCaptured(orderId, request.getPaymentId()));
         } catch (IllegalArgumentException ex) {
@@ -79,6 +88,7 @@ public class OrderController {
 
     @PatchMapping("/{orderId}/order-placed-email-sent")
     public ResponseEntity<OrderResponse> markOrderPlacedEmailSent(@PathVariable String orderId) {
+        log.info("Entering markOrderPlacedEmailSent with orderId: {}", orderId);
         try {
             return ResponseEntity.ok(orderService.markOrderPlacedEmailSent(orderId));
         } catch (IllegalArgumentException ex) {
@@ -90,6 +100,7 @@ public class OrderController {
 
     @PatchMapping("/{orderId}/payment-success-email-sent")
     public ResponseEntity<OrderResponse> markPaymentSuccessEmailSent(@PathVariable String orderId) {
+        log.info("Entering markPaymentSuccessEmailSent with orderId: {}", orderId);
         try {
             return ResponseEntity.ok(orderService.markPaymentSuccessEmailSent(orderId));
         } catch (IllegalArgumentException ex) {

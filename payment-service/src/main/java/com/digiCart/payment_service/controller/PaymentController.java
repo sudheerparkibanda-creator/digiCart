@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
@@ -26,8 +29,11 @@ public class PaymentController {
         this.razorpayWebhookVerifier = razorpayWebhookVerifier;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(PaymentController.class);
+
     @PostMapping("/orders/{orderId}/payment-link")
     public ResponseEntity<EnsurePaymentLinkResponse> ensurePaymentLink(@PathVariable String orderId) {
+        log.info("Entering ensurePaymentLink with orderId: {}", orderId);
         try {
             return ResponseEntity.ok(paymentLinkService.ensurePaymentLink(orderId));
         } catch (IllegalArgumentException ex) {
@@ -43,6 +49,7 @@ public class PaymentController {
     public ResponseEntity<Void> handleRazorpayWebhook(@RequestHeader(name = "X-Razorpay-Signature", required = false)
                                                       String signature,
                                                       @RequestBody String rawPayload) {
+        log.info("Entering handleRazorpayWebhook with signature: {}, rawPayload: {}", signature, rawPayload);
         if (!razorpayWebhookVerifier.isValidSignature(rawPayload, signature)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

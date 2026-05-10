@@ -10,10 +10,15 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class PriceServiceClient {
+
+    private static final Logger log = LoggerFactory.getLogger(PriceServiceClient.class);
 
     private final RestTemplate restTemplate;
     private final String baseUrl;
@@ -25,6 +30,7 @@ public class PriceServiceClient {
     }
 
     public PriceRow getByProductCode(String productCode) {
+        log.info("Entering getByProductCode with productCode: {}", productCode);
         if (productCode == null || productCode.isBlank()) {
             return null;
         }
@@ -37,6 +43,7 @@ public class PriceServiceClient {
     }
 
     public Map<String, PriceRow> getByProductCodes(List<String> productCodes) {
+        log.info("Entering getByProductCodes with productCodes: {}", productCodes);
         if (productCodes == null || productCodes.isEmpty()) {
             return Collections.emptyMap();
         }

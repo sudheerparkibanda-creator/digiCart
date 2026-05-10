@@ -15,8 +15,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class OrderServiceClient {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceClient.class);
 
     private final RestTemplate restTemplate;
     private final String baseUrl;
@@ -28,6 +33,7 @@ public class OrderServiceClient {
     }
 
     public OrderData getOrder(String orderId) {
+        log.info("Entering getOrder with orderId: {}", orderId);
         HttpHeaders headers = createInternalHeaders();
         try {
             HttpEntity<Void> request = new HttpEntity<>(headers);
@@ -48,6 +54,7 @@ public class OrderServiceClient {
     }
 
     public OrderData setPaymentLinkIfMissing(String orderId, String paymentLink) {
+        log.info("Entering setPaymentLinkIfMissing with orderId: {}, paymentLink: {}", orderId, paymentLink);
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("paymentLink", paymentLink);
 
@@ -70,6 +77,7 @@ public class OrderServiceClient {
     }
 
     public OrderData markPaymentCaptured(String orderId, String paymentId) {
+        log.info("Entering markPaymentCaptured with orderId: {}, paymentId: {}", orderId, paymentId);
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("paymentId", paymentId);
 

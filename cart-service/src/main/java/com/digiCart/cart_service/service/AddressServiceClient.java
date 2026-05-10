@@ -9,8 +9,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class AddressServiceClient {
+
+    private static final Logger log = LoggerFactory.getLogger(AddressServiceClient.class);
 
     private final RestTemplate restTemplate;
     private final String baseUrl;
@@ -22,6 +27,7 @@ public class AddressServiceClient {
     }
 
     public String createAddress(SetNewDeliveryAddressRequest request) {
+        log.info("Entering createAddress with request: {}", request);
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("fullName", request.getFullName());
         payload.put("mobileNumber", request.getMobileNumber());
@@ -49,6 +55,7 @@ public class AddressServiceClient {
     }
 
     public boolean addressExists(String addressId) {
+        log.info("Entering addressExists with addressId: {}", addressId);
         try {
             Map<?, ?> response = restTemplate.getForObject(baseUrl + "/addresses/" + addressId, Map.class);
             return response != null && response.get("addressId") != null;

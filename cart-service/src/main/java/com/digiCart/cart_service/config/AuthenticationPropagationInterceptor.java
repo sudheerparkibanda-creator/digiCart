@@ -9,6 +9,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 
 /**
@@ -21,9 +24,12 @@ import java.io.IOException;
 @Component
 public class AuthenticationPropagationInterceptor implements org.springframework.http.client.ClientHttpRequestInterceptor {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationPropagationInterceptor.class);
+
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body,
                                        ClientHttpRequestExecution execution) throws IOException {
+        log.info("Entering intercept with request URI: {}", request.getURI());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         
         if (auth != null && auth.isAuthenticated()) {

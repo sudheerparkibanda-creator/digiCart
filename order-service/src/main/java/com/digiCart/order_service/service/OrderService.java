@@ -7,6 +7,9 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.digiCart.order_service.dto.CreateOrderItemRequest;
 import com.digiCart.order_service.dto.CreateOrderRequest;
 import com.digiCart.order_service.dto.OrderItemResponse;
@@ -37,7 +40,10 @@ public class OrderService {
         this.paymentServiceClient = paymentServiceClient;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+
     public OrderResponse createOrder(CreateOrderRequest request) {
+        log.info("Entering createOrder with request: {}", request);
         System.out.println("OrderService.createOrder called with request: " + request);
         validateCreateOrderRequest(request);
 
@@ -81,10 +87,12 @@ public class OrderService {
     }
 
     public OrderResponse getOrder(String orderId) {
+        log.info("Entering getOrder with orderId: {}", orderId);
         return toResponse(getById(orderId));
     }
 
     public OrderResponse setPaymentLinkIfMissing(String orderId, String paymentLink) {
+        log.info("Entering setPaymentLinkIfMissing with orderId: {}, paymentLink: {}", orderId, paymentLink);
         if (paymentLink == null || paymentLink.isBlank()) {
             throw new IllegalArgumentException("paymentLink is required");
         }
@@ -98,6 +106,7 @@ public class OrderService {
     }
 
     public OrderResponse markPaymentCaptured(String orderId, String paymentId) {
+        log.info("Entering markPaymentCaptured with orderId: {}, paymentId: {}", orderId, paymentId);
         if (paymentId == null || paymentId.isBlank()) {
             throw new IllegalArgumentException("paymentId is required");
         }
@@ -133,12 +142,14 @@ public class OrderService {
     }
 
     public OrderResponse markOrderPlacedEmailSent(String orderId) {
+        log.info("Entering markOrderPlacedEmailSent with orderId: {}", orderId);
         Order order = getById(orderId);
         order.setOrderPlacedEmailSent(true);
         return toResponse(orderRepository.save(order));
     }
 
     public OrderResponse markPaymentSuccessEmailSent(String orderId) {
+        log.info("Entering markPaymentSuccessEmailSent with orderId: {}", orderId);
         Order order = getById(orderId);
         order.setPaymentSuccessEmailSent(true);
         return toResponse(orderRepository.save(order));

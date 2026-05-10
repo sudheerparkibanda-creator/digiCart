@@ -17,6 +17,9 @@ import com.digiCart.user_service.dto.RegisterUserRequest;
 import com.digiCart.user_service.dto.RegisterUserResponse;
 import com.digiCart.user_service.service.UserAuthService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/internal/auth")
 public class InternalAuthController {
@@ -27,9 +30,12 @@ public class InternalAuthController {
         this.userAuthService = userAuthService;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(InternalAuthController.class);
+
     @PostMapping("/verify")
     @PreAuthorize("permitAll()")
     public ResponseEntity<AuthVerifyResponse> verify(@RequestBody AuthVerifyRequest request) {
+        log.info("Entering verify with request: {}", request);
         AuthVerifyResponse response = userAuthService.verify(request);
         if (!response.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -40,6 +46,7 @@ public class InternalAuthController {
     @PostMapping("/register")
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> register(@RequestBody RegisterUserRequest request) {
+        log.info("Entering register with request: {}", request);
         try {
             RegisterUserResponse response = userAuthService.register(request);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -57,6 +64,7 @@ public class InternalAuthController {
     @PostMapping("/activate")
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> activate(@RequestBody ActivationRequest request) {
+        log.info("Entering activate with request: {}", request);
         try {
             userAuthService.activateUser(request);
             return ResponseEntity.ok(Map.of("message", "User account activated successfully. You can now login."));

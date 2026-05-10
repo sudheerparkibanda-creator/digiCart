@@ -13,8 +13,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class UserAuthClient {
+
+    private static final Logger log = LoggerFactory.getLogger(UserAuthClient.class);
 
     private final RestTemplate restTemplate;
     private final String baseUrl;
@@ -26,6 +31,7 @@ public class UserAuthClient {
     }
 
     public UserAuthVerifyResponse verifyCredentials(LoginRequest request) {
+        log.info("Entering verifyCredentials with request: {}", request);
         System.out.println("UserAuthClient: Verifying credentials for " + request.getUsername() + ", baseUrl: " + baseUrl);
         try {
             ResponseEntity<UserAuthVerifyResponse> response = restTemplate.postForEntity(
@@ -43,6 +49,7 @@ public class UserAuthClient {
     }
 
     public UserRegisterResponse registerUser(RegisterRequest request) {
+        log.info("Entering registerUser with request: {}", request);
         ResponseEntity<UserRegisterResponse> response = restTemplate.postForEntity(
                 baseUrl + "/internal/auth/register",
                 request,
@@ -51,6 +58,7 @@ public class UserAuthClient {
     }
 
     public void activateUser(ActivationRequest request) {
+        log.info("Entering activateUser with request: {}", request);
         restTemplate.postForEntity(
                 baseUrl + "/internal/auth/activate",
                 request,

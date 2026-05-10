@@ -6,8 +6,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class PaymentLinkResponseProducer {
+
+    private static final Logger log = LoggerFactory.getLogger(PaymentLinkResponseProducer.class);
 
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
@@ -22,6 +27,7 @@ public class PaymentLinkResponseProducer {
     }
 
     public void publish(PaymentLinkResponseEvent responseEvent) {
+        log.info("Entering publish with responseEvent: {}", responseEvent);
         try {
             String payload = objectMapper.writeValueAsString(responseEvent);
             kafkaTemplate.send(responseTopic, responseEvent.getOrderId(), payload);

@@ -6,8 +6,13 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class RazorpayWebhookVerifier {
+
+    private static final Logger log = LoggerFactory.getLogger(RazorpayWebhookVerifier.class);
 
     private final String webhookSecret;
 
@@ -16,6 +21,7 @@ public class RazorpayWebhookVerifier {
     }
 
     public boolean isValidSignature(String rawPayload, String signatureHeader) {
+        log.info("Entering isValidSignature with rawPayload length: {}, signatureHeader: {}", rawPayload != null ? rawPayload.length() : 0, signatureHeader);
         if (rawPayload == null || signatureHeader == null || signatureHeader.isBlank()) {
             return false;
         }

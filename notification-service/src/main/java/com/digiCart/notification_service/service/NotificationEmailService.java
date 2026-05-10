@@ -36,6 +36,7 @@ public class NotificationEmailService {
     }
 
     public void sendOrderPlacedEmail(OrderPlacedNotificationEvent event) {
+        log.info("Entering sendOrderPlacedEmail with event: {}", event);
         Context context = new Context();
         context.setVariable("orderId", event.getOrderId());
         context.setVariable("paymentLink", event.getPaymentLink());
@@ -50,6 +51,7 @@ public class NotificationEmailService {
     }
 
     public void sendPaymentSuccessEmail(PaymentSuccessNotificationEvent event) {
+        log.info("Entering sendPaymentSuccessEmail with event: {}", event);
         Context context = new Context();
         context.setVariable("orderId", event.getOrderId());
         context.setVariable("paymentId", event.getPaymentId());
@@ -64,6 +66,7 @@ public class NotificationEmailService {
     }
 
     public void sendUserRegistrationEmail(UserRegistrationNotificationEvent event) {
+        log.info("Entering sendUserRegistrationEmail with event: {}", event);
         Context context = new Context();
         context.setVariable("name", event.getName());
         context.setVariable("verificationCode", event.getVerificationCode());

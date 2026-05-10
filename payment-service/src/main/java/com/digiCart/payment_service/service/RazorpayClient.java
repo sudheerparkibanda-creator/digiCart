@@ -11,8 +11,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class RazorpayClient {
+
+    private static final Logger log = LoggerFactory.getLogger(RazorpayClient.class);
 
     private final RestTemplate restTemplate;
     private final String apiBaseUrl;
@@ -30,6 +35,7 @@ public class RazorpayClient {
     }
 
     public String createPaymentLink(String orderId, Double amount) {
+        log.info("Entering createPaymentLink with orderId: {}, amount: {}", orderId, amount);
         if (amount == null || amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         }

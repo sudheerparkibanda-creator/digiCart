@@ -12,10 +12,15 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class StockServiceClient {
+
+    private static final Logger log = LoggerFactory.getLogger(StockServiceClient.class);
 
     private static final String PRODUCT_ID_FIELD = "productId";
 
@@ -29,6 +34,7 @@ public class StockServiceClient {
     }
 
     public StockInfo getByProductId(String productId) {
+        log.info("Entering getByProductId with productId: {}", productId);
         if (productId == null || productId.isBlank()) {
             return null;
         }
@@ -41,6 +47,7 @@ public class StockServiceClient {
     }
 
     public Map<String, StockInfo> getByProductIds(List<String> productIds) {
+        log.info("Entering getByProductIds with productIds: {}", productIds);
         if (productIds == null || productIds.isEmpty()) {
             return Collections.emptyMap();
         }

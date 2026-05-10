@@ -6,8 +6,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class PriceServiceClient {
+
+    private static final Logger log = LoggerFactory.getLogger(PriceServiceClient.class);
 
     private final RestTemplate restTemplate;
     private final String baseUrl;
@@ -19,6 +24,7 @@ public class PriceServiceClient {
     }
 
     public PriceData getByProductCode(String productCode) {
+        log.info("Entering getByProductCode with productCode: {}", productCode);
         if (productCode == null || productCode.isBlank()) {
             return null;
         }

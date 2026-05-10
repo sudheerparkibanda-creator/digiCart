@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -25,13 +28,17 @@ public class ProductController {
         this.productService = productService;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
+
     @GetMapping
     public List<Product> getAllProducts() {
+        log.info("Entering getAllProducts");
         return productService.getAllProducts();
     }
 
     @GetMapping("/{code}")
     public ResponseEntity<Product> getProductByID(@PathVariable String code) {
+        log.info("Entering getProductByID with code: {}", code);
         return productService.getByCode(code)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -40,18 +47,21 @@ public class ProductController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addProduct(@RequestBody Product request) {
+        log.info("Entering addProduct with request: {}", request);
         return saveOrUpdate(request);
     }
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProduct(@RequestBody Product request) {
+        log.info("Entering updateProduct with request: {}", request);
         return saveOrUpdate(request);
     }
 
     @DeleteMapping("/{code}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> removeProduct(@PathVariable String code) {
+        log.info("Entering removeProduct with code: {}", code);
         return productService.removeByCode(code)
                 .map(product -> ResponseEntity.noContent().<Void>build())
                 .orElseGet(() -> ResponseEntity.notFound().build());
